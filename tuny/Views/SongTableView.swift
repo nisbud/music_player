@@ -15,7 +15,6 @@ final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelega
 		self.viewModel = viewModel
 		
 		super.init(frame: .zero, style: .plain)
-		
 		setupTableView()
 	}
 	
@@ -45,7 +44,22 @@ final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelega
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		guard indexPath.row < viewModel.songs.count, let cell = tableView.cellForRow(at: indexPath) as? SongTableViewCell else {
+			return
+		}
+		
+		cell.showPlayingIndicator()
+		
 		// Play music
-		// Show playing icon
+	}
+	
+	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+		guard indexPath.row < viewModel.songs.count, let cell = tableView.cellForRow(at: indexPath) as? SongTableViewCell else {
+			return
+		}
+		
+		cell.hidePlayingIndicator()
+		
+		// Stop music
 	}
 }

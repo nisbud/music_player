@@ -24,6 +24,11 @@ final class SongTableViewCell: UITableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	override func prepareForReuse() {
+		super.prepareForReuse()
+		hidePlayingIndicator()
+	}
+	
 	func configure(with song: Song) {
 		songNameLabel.text = song.title
 		artistLabel.text = song.artist
@@ -36,13 +41,26 @@ final class SongTableViewCell: UITableViewCell {
 		}
 	}
 	
+	func showPlayingIndicator() {
+		playingIndicator.isHidden = false
+	}
+	
+	func hidePlayingIndicator() {
+		playingIndicator.isHidden = true
+	}
+	
 	private func setupViews() {
+		setupCellStyle()
 		setupSongImage()
 		setupNameLabel()
 		setupArtistLabel()
 		setupAlbumLabel()
 		setupPlayingIndicator()
 		setupConstraints()
+	}
+	
+	private func setupCellStyle() {
+		selectionStyle = .none
 	}
 	
 	private func setupSongImage() {
@@ -73,6 +91,8 @@ final class SongTableViewCell: UITableViewCell {
 	private func setupPlayingIndicator() {
 		playingIndicator.image = UIImage(named: "icon_playing")
 		playingIndicator.translatesAutoresizingMaskIntoConstraints = false
+		playingIndicator.contentMode = .scaleAspectFit
+		playingIndicator.isHidden = true
 		contentView.addSubview(playingIndicator)
 	}
 	
@@ -85,7 +105,7 @@ final class SongTableViewCell: UITableViewCell {
 			
 			songNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
 			songNameLabel.leadingAnchor.constraint(equalTo: songImageView.trailingAnchor, constant: 10),
-			songNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: playingIndicator.leadingAnchor, constant: -20),
+			songNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -70),
 			
 			artistLabel.topAnchor.constraint(equalTo: songNameLabel.bottomAnchor, constant: 2),
 			artistLabel.leadingAnchor.constraint(equalTo: songNameLabel.leadingAnchor),
@@ -96,8 +116,8 @@ final class SongTableViewCell: UITableViewCell {
 			
 			playingIndicator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
 			playingIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-			playingIndicator.widthAnchor.constraint(equalToConstant: 24),
-			playingIndicator.heightAnchor.constraint(equalToConstant: 24)
+			playingIndicator.widthAnchor.constraint(equalToConstant: 48),
+			playingIndicator.heightAnchor.constraint(equalToConstant: 48)
 		])
 	}
 }
