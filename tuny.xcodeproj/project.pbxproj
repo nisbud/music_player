@@ -30,7 +30,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1743034D2E267D7E00CBF894 /* Exceptions for "tuny" folder in "tuny" target */ = {
+		1743038D2E2688A300CBF894 /* Exceptions for "tuny" folder in "tuny" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -40,17 +40,17 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		174303272E267D7C00CBF894 /* tuny */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				1743034D2E267D7E00CBF894 /* Exceptions for "tuny" folder in "tuny" target */,
-			);
-			path = tuny;
-			sourceTree = "<group>";
-		};
 		1743033E2E267D7E00CBF894 /* tunyTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = tunyTests;
+			sourceTree = "<group>";
+		};
+		174303862E2688A300CBF894 /* tuny */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1743038D2E2688A300CBF894 /* Exceptions for "tuny" folder in "tuny" target */,
+			);
+			path = tuny;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -83,7 +83,7 @@
 		1743031C2E267D7C00CBF894 = {
 			isa = PBXGroup;
 			children = (
-				174303272E267D7C00CBF894 /* tuny */,
+				174303862E2688A300CBF894 /* tuny */,
 				1743033E2E267D7E00CBF894 /* tunyTests */,
 				174303262E267D7C00CBF894 /* Products */,
 			);
@@ -115,7 +115,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				174303272E267D7C00CBF894 /* tuny */,
+				174303862E2688A300CBF894 /* tuny */,
 			);
 			name = tuny;
 			packageProductDependencies = (
