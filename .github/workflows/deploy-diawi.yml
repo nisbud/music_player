@@ -10,17 +10,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Select Xcode 16.2
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
 
       - name: Build .app
         env:
-          scheme: ${{ 'default' }}
           platform: ${{ 'iOS Simulator' }}
           os: ${{ '17.5' }}
           device: ${{ 'iPhone 15' }}
-        run: xcodebuild -project tuny.xcodeproj -scheme "$scheme" -configuration Release -sdk iphonesimulator -derivedDataPath build -destination "platform=$platform,OS=$os,name=$device"
+        run: xcodebuild -project tuny.xcodeproj -scheme tuny -configuration Release -sdk iphonesimulator -derivedDataPath build -destination "platform=$platform,OS=$os,name=$device"
 
       - name: Locate .app
         run: |
