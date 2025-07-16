@@ -13,9 +13,9 @@ final class SongListViewModel {
 	var onDoneFetch: (() -> Void)?
 	
 	private(set) var songs: [Song] = []
-	private let service: SongService
+	private let service: SongServicable
 	
-	init(service: SongService = SongService.shared) {
+	init(service: SongServicable = SongService.shared) {
 		self.service = service
 	}
 	
