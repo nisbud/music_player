@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class SongService {
+final class SongService: SongServicable {
 	static let shared = SongService()
 	
 	func querySongs(query: String, completion: @escaping (Result<FreesoundQueryResponse, Error>) -> Void) {

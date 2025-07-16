@@ -7,7 +7,7 @@
 
 import AVFoundation
 
-final class AudioPlayer {
+final class AudioPlayer: AudioPlayable {
 	static let shared = AudioPlayer()
 	
 	private var player: AVPlayer?
