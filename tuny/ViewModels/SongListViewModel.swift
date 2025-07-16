@@ -5,6 +5,8 @@
 //  Created by Anisa Budi Arthati on 15/07/25.
 //
 
+import Foundation
+
 final class SongListViewModel {
 	
 	var isFetching: Bool = false

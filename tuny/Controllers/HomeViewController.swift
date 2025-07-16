@@ -44,6 +44,7 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 		songListViewModel.onDoneFetch = { [weak self] in
 			DispatchQueue.main.async {
 				self?.tableView.reloadData()
+				LoadingView.shared.hide()
 			}
 		}
 		
@@ -105,6 +106,7 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 			return
 		}
 		
+		LoadingView.shared.show(over: view)
 		songListViewModel.querySongs(query: query)
 	}
 }

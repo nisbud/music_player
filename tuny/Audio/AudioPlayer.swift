@@ -53,7 +53,10 @@ final class AudioPlayer {
 	private func observeTime() {
 		timeObserverToken = player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 2),
 															 queue: .main) { [weak self] time in
-			guard let duration = self?.duration(), duration > 0 else { return }
+			guard let duration = self?.duration(), duration > 0 else {
+				return
+			}
+			
 			self?.onTimeUpdate?(time.seconds, duration)
 		}
 	}
