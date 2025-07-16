@@ -34,11 +34,7 @@ final class SongTableViewCell: UITableViewCell {
 		artistLabel.text = song.artist
 		albumLabel.text = song.album
 		
-		if let url = song.artworkURL {
-			// Configure Artwork
-		} else {
-			songImageView.image = UIImage(named: "icon_song")
-		}
+		configureImage(of: song)
 	}
 	
 	func showPlayingIndicator() {
@@ -119,5 +115,19 @@ final class SongTableViewCell: UITableViewCell {
 			playingIndicator.widthAnchor.constraint(equalToConstant: 48),
 			playingIndicator.heightAnchor.constraint(equalToConstant: 48)
 		])
+	}
+	
+	private func configureImage(of song: Song) {
+		DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+			if let url = song.artworkURL, let data = try? Data(contentsOf: url) {
+				DispatchQueue.main.async {
+					self?.songImageView.image = UIImage(data: data)
+				}
+			} else {
+				DispatchQueue.main.async {
+					self?.songImageView.image = UIImage(named: "icon_song")
+				}
+			}
+		}
 	}
 }
