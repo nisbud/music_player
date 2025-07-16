@@ -38,9 +38,10 @@ jobs:
           path: output/tuny.zip
       - name: Upload to Diawi
         env:
-          DIAWI_TOKEN: ${{ secrets.DIAWI_TOKEN }}
+          DIAWI_TOKEN: ${{ secrets.DIAWI_API_TOKEN }}
         run: |
-          curl -F "file=@output/tuny.zip" \
-               -F "token=$DIAWI_TOKEN" \
-               -F "wall_of_apps=false" \
-               https://upload.diawi.com/
+          curl https://upload.diawi.com/ \
+          -F "file=@output/tuny.zip" \
+          -F "token=$DIAWI_TOKEN" \
+          -F "wall_of_apps=false" \
+
