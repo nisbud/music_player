@@ -9,6 +9,8 @@ import UIKit
 
 final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
 	
+	var onSelectSong: ((Int) -> Void)?
+	
 	private let viewModel: SongListViewModel
 	
 	init(viewModel: SongListViewModel) {
@@ -49,8 +51,7 @@ final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelega
 		}
 		
 		cell.showPlayingIndicator()
-		
-		// Play music
+		onSelectSong?(indexPath.row)
 	}
 	
 	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

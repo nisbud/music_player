@@ -9,15 +9,18 @@ import UIKit
 
 final class HomeViewController: UIViewController, UISearchBarDelegate {
 	
-	private let viewModel: SongListViewModel
+	private let songListViewModel: SongListViewModel
+	private let playerViewModel: PlayerViewModel
 	private let searchBar = UISearchBar()
 	private let tableView: SongTableView
-	private var musicControllerView = MusicControllerView()
+	private var musicControllerView: MusicControllerView
 	private var musicControllerBottomConstraint: NSLayoutConstraint!
 	
-	init(viewModel: SongListViewModel) {
-		self.viewModel = viewModel
-		self.tableView = SongTableView(viewModel: viewModel)
+	init(songListViewModel: SongListViewModel, playerViewModel: PlayerViewModel) {
+		self.songListViewModel = songListViewModel
+		self.playerViewModel = playerViewModel
+		self.tableView = SongTableView(viewModel: songListViewModel)
+		self.musicControllerView = MusicControllerView(viewModel: playerViewModel)
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -38,10 +41,14 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 	
 	private func setupViewModel() {
 		
-		viewModel.onDoneQuery = { [weak self] in
+		songListViewModel.onDoneQuery = { [weak self] in
 			DispatchQueue.main.async {
 				self?.tableView.reloadData()
 			}
+		}
+		
+		playerViewModel.onFinished = { [weak self] in
+			self?.tableView.onDeselectSong?()
 		}
 	}
 	
@@ -64,13 +71,18 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 			tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
 			tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150)
 		])
+		
+		tableView.onSelectSong = { [weak self] row in
+			self?.musicControllerView.isHidden = false
+			self?.playerViewModel.currentSong = self?.songListViewModel.songs[row]
+		}
 	}
 	
 	private func setupMusicController() {
 		musicControllerView.translatesAutoresizingMaskIntoConstraints = false
-		musicControllerView.isHidden = false
+		musicControllerView.isHidden = true
 		view.addSubview(musicControllerView)
 		
 		musicControllerBottomConstraint = musicControllerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)

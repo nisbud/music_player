@@ -9,7 +9,6 @@ import UIKit
 
 final class MusicControllerView: UIView {
 	
-	var onPlayTapped: (() -> Void)?
 	var onNextTapped: (() -> Void)?
 	var onPrevTapped: (() -> Void)?
 	
@@ -18,21 +17,22 @@ final class MusicControllerView: UIView {
 	private let prevButton = UIButton()
 	private let progressSlider = UISlider()
 	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
+	private let viewModel: PlayerViewModel
+	
+	init(viewModel: PlayerViewModel) {
+		self.viewModel = viewModel
+		super.init(frame: .zero)
+		
+		bindViewModel()
 		
 		setupView()
 		setupButtons()
+		setupSlider()
 		setupConstraints()
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-	
-	func setPlaying(_ isPlaying: Bool) {
-		let imageName = isPlaying ? "icon_play" : "icon_pause"
-		playButton.setImage(UIImage(named: imageName), for: .normal)
 	}
 	
 	private func setupView() {
@@ -56,6 +56,10 @@ final class MusicControllerView: UIView {
 		playButton.addTarget(self, action: #selector(playTapped), for: .touchUpInside)
 		nextButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
 		prevButton.addTarget(self, action: #selector(prevTapped), for: .touchUpInside)
+	}
+	
+	private func setupSlider() {
+		progressSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
 	}
 	
 	private func setupConstraints() {
@@ -82,8 +86,28 @@ final class MusicControllerView: UIView {
 		])
 	}
 	
+	private func setPlaying(_ isPlaying: Bool) {
+		let imageName = isPlaying ? "icon_pause" : "icon_play"
+		playButton.setImage(UIImage(named: imageName), for: .normal)
+	}
+	
+	private func bindViewModel() {
+		viewModel.onProgressUpdate = { [weak self] current, duration in
+			self?.progressSlider.maximumValue = Float(duration)
+			self?.progressSlider.value = Float(current)
+		}
+		
+		viewModel.onFinished = { [weak self] in
+			self?.isHidden = true
+		}
+		
+		viewModel.onPlay = { [weak self] isPlaying in
+			self?.setPlaying(isPlaying)
+		}
+	}
+	
 	@objc private func playTapped() {
-		onPlayTapped?()
+		viewModel.togglePlayback()
 	}
 	
 	@objc private func nextTapped() {
@@ -92,5 +116,9 @@ final class MusicControllerView: UIView {
 	
 	@objc private func prevTapped() {
 		onPrevTapped?()
+	}
+	
+	@objc private func sliderChanged(_ sender: UISlider) {
+		viewModel.seek(to: Double(sender.value))
 	}
 }
