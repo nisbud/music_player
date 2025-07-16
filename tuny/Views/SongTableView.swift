@@ -10,6 +10,7 @@ import UIKit
 final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
 	
 	var onSelectSong: ((Int) -> Void)?
+	var onDeselectSong: (() -> Void)?
 	
 	private let viewModel: SongListViewModel
 	
@@ -30,6 +31,23 @@ final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelega
 		dataSource = self
 		delegate = self
 		register(SongTableViewCell.self, forCellReuseIdentifier: "SongCell")
+		
+		onDeselectSong = { [weak self] in
+			self?.deselectRow()
+		}
+	}
+	
+	private func deselectRow() {
+		guard
+			let selectedIndexPath = indexPathForSelectedRow,
+			selectedIndexPath.row < viewModel.songs.count,
+			let cell = cellForRow(at: selectedIndexPath) as? SongTableViewCell else
+		{
+			return
+		}
+		
+		deselectRow(at: selectedIndexPath, animated: true)
+		cell.hidePlayingIndicator()
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

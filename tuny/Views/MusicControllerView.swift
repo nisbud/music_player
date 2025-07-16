@@ -97,10 +97,6 @@ final class MusicControllerView: UIView {
 			self?.progressSlider.value = Float(current)
 		}
 		
-		viewModel.onFinished = { [weak self] in
-			self?.isHidden = true
-		}
-		
 		viewModel.onPlay = { [weak self] isPlaying in
 			self?.setPlaying(isPlaying)
 		}

@@ -49,6 +49,7 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 		
 		playerViewModel.onFinished = { [weak self] in
 			self?.tableView.onDeselectSong?()
+			self?.musicControllerView.isHidden = true
 		}
 	}
 	
