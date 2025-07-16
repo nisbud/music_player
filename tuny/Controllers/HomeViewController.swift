@@ -48,8 +48,16 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 		}
 		
 		playerViewModel.onFinished = { [weak self] in
-			self?.tableView.onDeselectSong?()
+			self?.tableView.updateSelectedRow(reason: .finished)
 			self?.musicControllerView.isHidden = true
+		}
+		
+		playerViewModel.onNext = { [weak self] in
+			self?.tableView.updateSelectedRow(reason: .next)
+		}
+		
+		playerViewModel.onPrev = { [weak self] in
+			self?.tableView.updateSelectedRow(reason: .prev)
 		}
 	}
 	

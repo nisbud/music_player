@@ -56,7 +56,7 @@ final class SongTableViewCell: UITableViewCell {
 	}
 	
 	private func setupCellStyle() {
-		selectionStyle = .none
+		selectionStyle = .default
 	}
 	
 	private func setupSongImage() {

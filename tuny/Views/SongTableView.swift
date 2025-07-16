@@ -9,8 +9,13 @@ import UIKit
 
 final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
 	
+	enum Reason {
+		case finished
+		case next
+		case prev
+	}
+	
 	var onSelectSong: ((Int) -> Void)?
-	var onDeselectSong: (() -> Void)?
 	
 	private let viewModel: SongListViewModel
 	
@@ -31,13 +36,18 @@ final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelega
 		dataSource = self
 		delegate = self
 		register(SongTableViewCell.self, forCellReuseIdentifier: "SongCell")
-		
-		onDeselectSong = { [weak self] in
-			self?.deselectRow()
-		}
 	}
 	
-	private func deselectRow() {
+	private func selectSong(by indexPath: IndexPath) {
+		guard indexPath.row < viewModel.songs.count, let cell = cellForRow(at: indexPath) as? SongTableViewCell else {
+			return
+		}
+		
+		cell.showPlayingIndicator()
+		onSelectSong?(indexPath.row)
+	}
+	
+	func updateSelectedRow(reason: Reason) {
 		guard
 			let selectedIndexPath = indexPathForSelectedRow,
 			selectedIndexPath.row < viewModel.songs.count,
@@ -46,8 +56,25 @@ final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelega
 			return
 		}
 		
-		deselectRow(at: selectedIndexPath, animated: true)
-		cell.hidePlayingIndicator()
+		switch reason {
+		case .finished:
+			deselectRow(at: selectedIndexPath, animated: true)
+			cell.hidePlayingIndicator()
+		case .next:
+			deselectRow(at: selectedIndexPath, animated: true)
+			cell.hidePlayingIndicator()
+			
+			let newIndexPath = IndexPath(row: selectedIndexPath.row+1, section: 0)
+			selectRow(at: newIndexPath, animated: true, scrollPosition: .middle)
+			selectSong(by: newIndexPath)
+		case .prev:
+			deselectRow(at: selectedIndexPath, animated: true)
+			cell.hidePlayingIndicator()
+			
+			let newIndexPath = IndexPath(row: selectedIndexPath.row-1, section: 0)
+			selectRow(at: newIndexPath, animated: true, scrollPosition: .middle)
+			selectSong(by: newIndexPath)
+		}
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,12 +91,7 @@ final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelega
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		guard indexPath.row < viewModel.songs.count, let cell = tableView.cellForRow(at: indexPath) as? SongTableViewCell else {
-			return
-		}
-		
-		cell.showPlayingIndicator()
-		onSelectSong?(indexPath.row)
+		selectSong(by: indexPath)
 	}
 	
 	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

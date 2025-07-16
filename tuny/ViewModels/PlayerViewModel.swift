@@ -12,6 +12,8 @@ final class PlayerViewModel {
 	var onProgressUpdate: ((Double, Double) -> Void)?
 	var onPlay: ((Bool) -> Void)?
 	var onFinished: (() -> Void)?
+	var onNext: (() -> Void)?
+	var onPrev: (() -> Void)?
 
 	var currentSong: Song? {
 		didSet {

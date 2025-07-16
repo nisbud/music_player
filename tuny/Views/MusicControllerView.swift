@@ -9,9 +9,6 @@ import UIKit
 
 final class MusicControllerView: UIView {
 	
-	var onNextTapped: (() -> Void)?
-	var onPrevTapped: (() -> Void)?
-	
 	private let playButton = UIButton()
 	private let nextButton = UIButton()
 	private let prevButton = UIButton()
@@ -107,11 +104,11 @@ final class MusicControllerView: UIView {
 	}
 	
 	@objc private func nextTapped() {
-		onNextTapped?()
+		viewModel.onNext?()
 	}
 	
 	@objc private func prevTapped() {
-		onPrevTapped?()
+		viewModel.onPrev?()
 	}
 	
 	@objc private func sliderChanged(_ sender: UISlider) {
