@@ -25,9 +25,9 @@ final class PlayerViewModel {
 		return player.isPlaying()
 	}
 
-	private let player: AudioPlayer
+	private var player: AudioPlayable
 	
-	init(player: AudioPlayer = AudioPlayer.shared) {
+	init(player: AudioPlayable = AudioPlayer.shared) {
 		self.player = player
 		
 		bindAudioEvents()
