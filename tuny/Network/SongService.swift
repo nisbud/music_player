@@ -27,12 +27,6 @@ final class SongService {
 				return
 			}
 			
-			if let json = try? JSONSerialization.jsonObject(with: data, options: []),
-			   let pretty = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
-			   let jsonString = String(data: pretty, encoding: .utf8) {
-				print(jsonString)
-			}
-			
 			do {
 				let song = try JSONDecoder().decode(FreesoundQueryResponse.self, from: data)
 				completion(.success(song))
@@ -42,30 +36,30 @@ final class SongService {
 		}.resume()
 	}
 	
-	func fetchSong(id: Int, completion: @escaping (Result<FreesoundSoundResponse, Error>) -> Void) {
-		let songId: String = String(id)
-		guard let url = Constants.getSongURL(id: songId) else {
-			completion(.failure(NSError(domain: "bad_url", code: 0)))
-			return
-		}
-		
-		URLSession.shared.dataTask(with: url) { data, response, error in
-			if let error = error {
-				completion(.failure(error))
-				return
-			}
-			
-			guard let data = data else {
-				completion(.failure(NSError(domain: "no_data", code: 0)))
-				return
-			}
-			
-			do {
-				let song = try JSONDecoder().decode(FreesoundSoundResponse.self, from: data)
-				completion(.success(song))
-			} catch {
-				completion(.failure(error))
-			}
-		}.resume()
-	}
+//	func fetchSong(id: Int, completion: @escaping (Result<FreesoundSoundResponse, Error>) -> Void) {
+//		let songId: String = String(id)
+//		guard let url = Constants.getSongURL(id: songId) else {
+//			completion(.failure(NSError(domain: "bad_url", code: 0)))
+//			return
+//		}
+//		
+//		URLSession.shared.dataTask(with: url) { data, response, error in
+//			if let error = error {
+//				completion(.failure(error))
+//				return
+//			}
+//			
+//			guard let data = data else {
+//				completion(.failure(NSError(domain: "no_data", code: 0)))
+//				return
+//			}
+//			
+//			do {
+//				let song = try JSONDecoder().decode(FreesoundSoundResponse.self, from: data)
+//				completion(.success(song))
+//			} catch {
+//				completion(.failure(error))
+//			}
+//		}.resume()
+//	}
 }

@@ -20,24 +20,24 @@ final class SongListViewModel {
 		querySongs()
 	}
 	
-	func fetchSong(id: Int) {
-		isFetching = true
-		
-		service.fetchSong(id: id) { [weak self] result in
-			
-			switch result {
-			case .success(let sound):
-				let song = Song(from: sound)
-				self?.songs.append(song)
-				
-			case .failure(let error):
-				print("Error loading sound: \(error)")
-			}
-			
-			self?.isFetching = false
-			self?.onDoneFetch?()
-		}
-	}
+//	func fetchSong(id: Int) {
+//		isFetching = true
+//		
+//		service.fetchSong(id: id) { [weak self] result in
+//			
+//			switch result {
+//			case .success(let sound):
+//				let song = Song(from: sound)
+//				self?.songs.append(song)
+//				
+//			case .failure(let error):
+//				print("Error loading sound: \(error)")
+//			}
+//			
+//			self?.isFetching = false
+//			self?.onDoneFetch?()
+//		}
+//	}
 	
 	func querySongs() {
 		isFetching = true
