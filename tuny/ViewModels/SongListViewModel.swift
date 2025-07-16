@@ -5,19 +5,18 @@
 //  Created by Anisa Budi Arthati on 15/07/25.
 //
 
+import Foundation
+
 final class SongListViewModel {
 	
-	var isFetching: Bool = true
+	var isFetching: Bool = false
 	var onDoneFetch: (() -> Void)?
-	var onDoneQuery: (() -> Void)?
 	
 	private(set) var songs: [Song] = []
 	private let service: SongService
 	
 	init(service: SongService = SongService.shared) {
 		self.service = service
-		
-		querySongs()
 	}
 	
 //	func fetchSong(id: Int) {
@@ -39,24 +38,29 @@ final class SongListViewModel {
 //		}
 //	}
 	
-	func querySongs() {
+	func querySongs(query: String) {
+		
+		guard !isFetching else {
+			return
+		}
+		
 		isFetching = true
 		
-		service.querySongs(query: "piano") { [weak self] result in
+		service.querySongs(query: query) { [weak self] result in
 			
 			switch result {
 			case .success(let soundList):
-				soundList.results.forEach { sound in
-					let song = Song(from: sound)
-					self?.songs.append(song)
-				}
+				self?.songs = soundList.results.map({ sound in
+					return Song(from: sound)
+				})
+				// No paging for now only take first page of result
 				
 			case .failure(let error):
 				print("Error loading sound: \(error)")
 			}
 			
 			self?.isFetching = false
-			self?.onDoneQuery?()
+			self?.onDoneFetch?()
 		}
 	}
 }
