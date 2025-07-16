@@ -14,7 +14,6 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 	private let searchBar = UISearchBar()
 	private let tableView: SongTableView
 	private var musicControllerView: MusicControllerView
-	private var musicControllerBottomConstraint: NSLayoutConstraint!
 	
 	init(songListViewModel: SongListViewModel, playerViewModel: PlayerViewModel) {
 		self.songListViewModel = songListViewModel
@@ -37,6 +36,7 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 		setupSearchBar()
 		setupTableView()
 		setupMusicController()
+		setupStackLayout()
 	}
 	
 	private func setupViewModel() {
@@ -55,25 +55,9 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 	
 	private func setupSearchBar() {
 		searchBar.placeholder = "Search"
-		searchBar.translatesAutoresizingMaskIntoConstraints = false
-		view.addSubview(searchBar)
-		
-		NSLayoutConstraint.activate([
-			searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-			searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-			searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-		])
 	}
 	
 	private func setupTableView() {
-		view.addSubview(tableView)
-		
-		NSLayoutConstraint.activate([
-			tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-			tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-			tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-			tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150)
-		])
 		
 		tableView.onSelectSong = { [weak self] row in
 			self?.musicControllerView.isHidden = false
@@ -82,18 +66,29 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 	}
 	
 	private func setupMusicController() {
-		musicControllerView.translatesAutoresizingMaskIntoConstraints = false
 		musicControllerView.isHidden = true
-		view.addSubview(musicControllerView)
+	}
+	
+	private func setupStackLayout() {
+		let stackView = UIStackView()
+		stackView.axis = .vertical
+		stackView.spacing = 8
+		stackView.alignment = .fill
+		stackView.distribution = .fill
 		
-		musicControllerBottomConstraint = musicControllerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+		view.addSubview(stackView)
+		stackView.translatesAutoresizingMaskIntoConstraints = false
 		
 		NSLayoutConstraint.activate([
-			musicControllerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-			musicControllerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-			musicControllerBottomConstraint,
-			musicControllerView.heightAnchor.constraint(equalToConstant: 150)
+			stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+			stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
 		])
+		
+		stackView.addArrangedSubview(searchBar)
+		stackView.addArrangedSubview(tableView)
+		stackView.addArrangedSubview(musicControllerView)
 	}
 }
 

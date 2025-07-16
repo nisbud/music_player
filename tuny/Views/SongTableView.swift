@@ -78,7 +78,5 @@ final class SongTableView: UITableView, UITableViewDataSource, UITableViewDelega
 		}
 		
 		cell.hidePlayingIndicator()
-		
-		// Stop music
 	}
 }
