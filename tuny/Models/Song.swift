@@ -28,7 +28,7 @@ struct Song {
 		self.id = String(sound.id)
 		self.title = sound.name
 		self.artist = sound.username
-		self.album = sound.description
+		self.album = sound.duration.asTime()
 		self.duration = sound.duration
 		self.artworkURL = URL(string: sound.images.waveformMedium ?? "")
 	}
