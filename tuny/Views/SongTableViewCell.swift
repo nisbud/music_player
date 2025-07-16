@@ -37,7 +37,7 @@ final class SongTableViewCell: UITableViewCell {
 		if let url = song.artworkURL {
 			// Configure Artwork
 		} else {
-			songImageView.image = UIImage(named: "icon_broken")
+			songImageView.image = UIImage(named: "icon_song")
 		}
 	}
 	
