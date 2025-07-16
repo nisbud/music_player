@@ -1,0 +1,44 @@
+name: Deploy to Diawi
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build .app
+        env:
+          scheme: ${{ 'default' }}
+          platform: ${{ 'iOS Simulator' }}
+          os: ${{ '17.5' }}
+          device: ${{ 'iPhone 15' }}
+        run: xcodebuild -project tuny.xcodeproj -scheme "$scheme" -configuration Release -sdk iphonesimulator -derivedDataPath build -destination "platform=$platform,OS=$os,name=$device"
+
+      - name: Locate .app
+        run: |
+          mkdir -p output
+          find build -name "*.app" -exec cp -R "{}" output/tuny.app \;
+
+      - name: Archive .app into .zip
+        run: |
+          cd output
+          zip -r tuny.zip tuny.app
+
+      - name: Upload .zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tuny-app
+          path: output/tuny.zip
+      - name: Upload to Diawi
+        env:
+          DIAWI_TOKEN: ${{ secrets.DIAWI_TOKEN }}
+        run: |
+          curl -F "file=@output/tuny.zip" \
+               -F "token=$DIAWI_TOKEN" \
+               -F "wall_of_apps=false" \
+               https://upload.diawi.com/
