@@ -9,14 +9,14 @@ import UIKit
 
 final class MusicControllerView: UIView {
 	
+	var onPlayTapped: (() -> Void)?
+	var onNextTapped: (() -> Void)?
+	var onPrevTapped: (() -> Void)?
+	
 	private let playButton = UIButton()
 	private let nextButton = UIButton()
 	private let prevButton = UIButton()
 	private let progressSlider = UISlider()
-	
-	var onPlayTapped: (() -> Void)?
-	var onNextTapped: (() -> Void)?
-	var onPrevTapped: (() -> Void)?
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)

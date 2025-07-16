@@ -17,13 +17,13 @@ final class SongListViewModel {
 	init(service: SongService = SongService.shared) {
 		self.service = service
 		
-		fetchSongs()
+		querySongs()
 	}
 	
-	private func fetchSongs() {
+	func fetchSong(id: Int) {
 		isFetching = true
 		
-		service.fetchSong(id: 816302) { [weak self] result in
+		service.fetchSong(id: id) { [weak self] result in
 			
 			switch result {
 			case .success(let sound):
@@ -36,6 +36,27 @@ final class SongListViewModel {
 			
 			self?.isFetching = false
 			self?.onDoneFetch?()
+		}
+	}
+	
+	func querySongs() {
+		isFetching = true
+		
+		service.querySongs(query: "piano") { [weak self] result in
+			
+			switch result {
+			case .success(let soundList):
+				soundList.results.forEach { sound in
+					let song = Song(from: sound)
+					self?.songs.append(song)
+				}
+				
+			case .failure(let error):
+				print("Error loading sound: \(error)")
+			}
+			
+			self?.isFetching = false
+			self?.onDoneQuery?()
 		}
 	}
 }

@@ -9,19 +9,40 @@ import UIKit
 
 final class HomeViewController: UIViewController, UISearchBarDelegate {
 	
+	private let viewModel: SongListViewModel
 	private let searchBar = UISearchBar()
-	private let tableView = SongTableView(viewModel: SongListViewModel())
+	private let tableView: SongTableView
 	private var musicControllerView = MusicControllerView()
 	private var musicControllerBottomConstraint: NSLayoutConstraint!
+	
+	init(viewModel: SongListViewModel) {
+		self.viewModel = viewModel
+		self.tableView = SongTableView(viewModel: viewModel)
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		view.backgroundColor = .white
 		title = "Tuny Player"
 		
+		setupViewModel()
 		setupSearchBar()
 		setupTableView()
 		setupMusicController()
+	}
+	
+	private func setupViewModel() {
+		
+		viewModel.onDoneQuery = { [weak self] in
+			DispatchQueue.main.async {
+				self?.tableView.reloadData()
+			}
+		}
 	}
 	
 	private func setupSearchBar() {

@@ -31,7 +31,7 @@ struct WaveImages: Codable {
 	}
 }
 
-struct FreesoundResponse: Codable {
+struct FreesoundSoundResponse: Codable {
 	let id: Int
 	let name: String
 	let username: String
@@ -39,4 +39,11 @@ struct FreesoundResponse: Codable {
 	let description: String
 	let previews: FreesoundPreviews
 	let images: WaveImages
+}
+
+struct FreesoundQueryResponse: Codable {
+	let count: Int
+	let next: String?
+	let results: [FreesoundSoundResponse]
+	let previous: String?
 }
