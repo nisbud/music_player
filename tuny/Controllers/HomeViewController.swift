@@ -41,7 +41,7 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 	
 	private func setupViewModel() {
 		
-		songListViewModel.onDoneQuery = { [weak self] in
+		songListViewModel.onDoneFetch = { [weak self] in
 			DispatchQueue.main.async {
 				self?.tableView.reloadData()
 			}
@@ -63,6 +63,7 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 	
 	private func setupSearchBar() {
 		searchBar.placeholder = "Search"
+		searchBar.delegate = self
 	}
 	
 	private func setupTableView() {
@@ -97,6 +98,14 @@ final class HomeViewController: UIViewController, UISearchBarDelegate {
 		stackView.addArrangedSubview(searchBar)
 		stackView.addArrangedSubview(tableView)
 		stackView.addArrangedSubview(musicControllerView)
+	}
+	
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		guard let query = searchBar.searchTextField.text, !query.isEmpty else {
+			return
+		}
+		
+		songListViewModel.querySongs(query: query)
 	}
 }
 
