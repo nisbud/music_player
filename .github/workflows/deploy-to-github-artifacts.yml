@@ -1,4 +1,4 @@
-name: Deploy to Diawi
+name: Deploy .app to Github Artifact
 
 on:
   workflow_dispatch:
@@ -36,12 +36,4 @@ jobs:
         with:
           name: tuny-app
           path: output/tuny.zip
-      - name: Upload to Diawi
-        env:
-          DIAWI_TOKEN: ${{ secrets.DIAWI_API_TOKEN }}
-        run: |
-          curl https://upload.diawi.com/ \
-          -F "file=@output/tuny.zip" \
-          -F "token=$DIAWI_TOKEN" \
-          -F "wall_of_apps=false" \
 
